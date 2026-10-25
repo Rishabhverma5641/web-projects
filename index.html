@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Forge Fitness Training</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --panel: #161616;
+            --line: #2a2a2a;
+            --text: #f2f2f2;
+            --muted: #a8a8a8;
+            --accent: #ff4d4d;
+            --accent2: #e03a3a;
+            color-scheme: dark;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 90px
+        }
+
+        *,
+        *:before,
+        *:after {
+            box-sizing: inherit
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            line-height: 1.6
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            line-height: 1.05;
+            margin: 0
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px
+        }
+
+        .wrap {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            padding: 12px 24px;
+            border: 0;
+            border-radius: 2px;
+            cursor: pointer;
+            font: 700 15px 'DM Sans', sans-serif
+        }
+
+        .btn:hover {
+            background: var(--accent2)
+        }
+
+        .btn.ghost {
+            background: transparent;
+            border: 2px solid var(--text)
+        }
+
+        .top {
+            background: var(--accent);
+            color: #fff;
+            font-size: 13px
+        }
+
+        .top .wrap {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 6px;
+            padding-bottom: 6px
+        }
+
+        header.main {
+            background: #000
+        }
+
+        header.main .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 14px;
+            padding-bottom: 14px;
+            gap: 16px
+        }
+
+        .logo {
+            font: 800 32px 'Barlow Condensed', sans-serif;
+            text-align: center;
+            letter-spacing: .02em;
+            line-height: 1
+        }
+
+        .logo small {
+            display: block;
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        nav {
+            background: #161616;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            z-index: 5
+        }
+
+        nav .wrap {
+            display: flex;
+            gap: 26px;
+            justify-content: center;
+            overflow-x: auto;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-size: 14px;
+            white-space: nowrap
+        }
+
+        nav a:hover,
+        nav a.on {
+            color: var(--accent)
+        }
+
+        .hero {
+            position: relative;
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: radial-gradient(circle at 78% 55%, #3a1414 0, #0a0a0a 55%)
+        }
+
+        .hero .wrap {
+            width: 100%;
+            position: relative;
+            z-index: 2
+        }
+
+        .hero h1 {
+            font-size: clamp(44px, 8vw, 84px);
+            font-weight: 800;
+            max-width: 560px;
+            text-transform: uppercase
+        }
+
+        .hero p {
+            color: var(--muted);
+            max-width: 420px;
+            margin: 16px 0 26px;
+            font-size: 18px
+        }
+
+        .hero .btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .plate {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: min(520px, 70vw);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 34px solid #1c1c1c;
+            box-shadow: inset 0 0 0 10px #111, 0 0 0 2px var(--line)
+        }
+
+        .plate:before {
+            content: "";
+            position: absolute;
+            inset: 26%;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 14px #111
+        }
+
+        .plate:after {
+            content: "45";
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font: 800 90px 'Barlow Condensed', sans-serif;
+            color: #fff
+        }
+
+        .stats {
+            background: var(--panel);
+            border-bottom: 1px solid var(--line)
+        }
+
+        .stats .wrap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            padding-top: 22px;
+            padding-bottom: 22px;
+            text-align: center
+        }
+
+        .stats b {
+            font: 700 36px 'Barlow Condensed', sans-serif;
+            color: var(--accent);
+            display: block
+        }
+
+        .stats span {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        section {
+            padding: 72px 0
+        }
+
+        section h2 {
+            font-size: clamp(34px, 5vw, 52px);
+            text-transform: uppercase;
+            margin-bottom: 10px
+        }
+
+        .lead {
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 0 36px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent);
+            padding: 24px
+        }
+
+        .card h3 {
+            font-size: 26px;
+            margin-bottom: 8px
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px
+        }
+
+        .plans .card {
+            border-left: 1px solid var(--line);
+            border-top: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .plans .feat {
+            background: #1d1010;
+            border-color: var(--accent)
+        }
+
+        .price {
+            font: 800 48px 'Barlow Condensed', sans-serif
+        }
+
+        .price small {
+            font: 400 14px 'DM Sans', sans-serif;
+            color: var(--muted)
+        }
+
+        .plans ul {
+            margin: 0 0 10px;
+            padding-left: 18px;
+            color: var(--muted);
+            font-size: 15px;
+            flex: 1
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px
+        }
+
+        .tw {
+            overflow-x: auto;
+            border: 1px solid var(--line)
+        }
+
+        th,
+        td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap
+        }
+
+        th {
+            background: var(--panel);
+            color: var(--accent);
+            font-weight: 700
+        }
+
+        .quote {
+            font-size: 17px
+        }
+
+        .quote cite {
+            display: block;
+            margin-top: 14px;
+            color: var(--muted);
+            font-style: normal;
+            font-size: 14px
+        }
+
+        .cta {
+            background: #000;
+            border-top: 1px solid var(--line)
+        }
+
+        .cta .wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        input,
+        select {
+            padding: 13px;
+            border: 0;
+            border-radius: 2px;
+            font: 15px 'DM Sans', sans-serif;
+            background: #fff;
+            color: #111;
+            width: 100%
+        }
+
+        form .btn {
+            grid-column: 1/-1
+        }
+
+        #msg {
+            grid-column: 1/-1;
+            color: var(--accent);
+            min-height: 1.4em;
+            margin: 0
+        }
+
+        footer {
+            background: #000;
+            border-top: 1px solid var(--line);
+            padding: 34px 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        footer .wrap {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px
+        }
+
+        @media(max-width:760px) {
+            .cta .wrap {
+                grid-template-columns: 1fr
+            }
+
+            .top .wrap span:last-child {
+                display: none
+            }
+
+            header.main .btn {
+                padding: 10px 14px
+            }
+
+            .plate {
+                opacity: .35
+            }
+        }
+
+        .btn {
+            transition: transform .15s, background .2s, box-shadow .2s
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 77, 77, .35)
+        }
+
+        .btn:active {
+            transform: translateY(0)
+        }
+
+        .hero h1,
+        .hero p,
+        .hero .btns {
+            animation: rise .8s cubic-bezier(.2, .7, .2, 1) both
+        }
+
+        .hero p {
+            animation-delay: .15s
+        }
+
+        .hero .btns {
+            animation-delay: .3s
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(28px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .plate {
+            animation: spin 40s linear infinite
+        }
+
+        @keyframes spin {
+            to {
+                transform: translateY(-50%) rotate(360deg)
+            }
+        }
+
+        .plate:after {
+            animation: spin2 40s linear infinite
+        }
+
+        @keyframes spin2 {
+            to {
+                transform: rotate(-360deg)
+            }
+        }
+
+        .js .rv {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .6s, transform .6s
+        }
+
+        .js .rv.in {
+            opacity: 1;
+            transform: none
+        }
+
+        .card {
+            transition: transform .25s, border-color .25s, background .25s
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            background: #1d1d1d
+        }
+
+        tr:not(:first-child):hover td {
+            background: #1d1010;
+            color: #fff
+        }
+
+        nav a {
+            position: relative;
+            padding-bottom: 4px
+        }
+
+        nav a:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 100%;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform .25s
+        }
+
+        nav a:hover:after,
+        nav a.on:after {
+            transform: scaleX(1)
+        }
+
+        .prog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0;
+            background: var(--accent);
+            z-index: 20
+        }
+
+        .tgl {
+            display: inline-flex;
+            border: 2px solid var(--accent);
+            border-radius: 30px;
+            margin-bottom: 30px;
+            overflow: hidden
+        }
+
+        .tgl button {
+            background: none;
+            border: 0;
+            color: var(--text);
+            padding: 8px 20px;
+            font: 700 14px 'DM Sans', sans-serif;
+            cursor: pointer;
+            transition: background .2s
+        }
+
+        .tgl button.on {
+            background: var(--accent)
+        }
+
+        details {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent);
+            padding: 18px 22px;
+            margin-bottom: 12px
+        }
+
+        summary {
+            cursor: pointer;
+            font: 700 24px 'Barlow Condensed', sans-serif;
+            list-style: none;
+            display: flex;
+            justify-content: space-between
+        }
+
+        summary::-webkit-details-marker {
+            display: none
+        }
+
+        summary:after {
+            content: "+";
+            color: var(--accent);
+            font-size: 28px;
+            line-height: 1;
+            transition: transform .25s
+        }
+
+        details[open] summary:after {
+            transform: rotate(45deg)
+        }
+
+        details p {
+            margin: 10px 0 0;
+            color: var(--muted)
+        }
+
+        .top-btn {
+            position: fixed;
+            right: 18px;
+            bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 0;
+            background: var(--accent);
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .3s, transform .2s;
+            z-index: 10
+        }
+
+        .top-btn.show {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .top-btn:hover {
+            transform: translateY(-3px)
+        }
+
+        input:focus,
+        select:focus {
+            outline: 3px solid var(--accent)
+        }
+
+        input.bad {
+            outline: 3px solid #ff9a9a
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+
+            *,
+            *:before,
+            *:after {
+                animation: none !important;
+                transition: none !important
+            }
+
+            .js .rv {
+                opacity: 1;
+                transform: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="prog" id="prog"></div>
+    <div class="top">
+        <div class="wrap"><span>Open daily 5am – 11pm</span><span>Login | Register</span></div>
+    </div>
+    <header class="main">
+        <div class="wrap">
+            <a href="tel:+15550142020">(555) 014-2020</a>
+            <a class="logo" href="#home">FORGE<small>FITNESS TRAINING</small></a>
+            <a class="btn" href="#join">Get in touch</a>
+        </div>
+    </header>
+    <nav aria-label="Main">
+        <div class="wrap">
+            <a class="on" href="#home">Home</a><a href="#services">Services</a><a href="#packages">Packages</a><a
+                href="#schedule">Classes</a><a href="#reviews">Testimonials</a><a href="#faq">FAQ</a><a
+                href="#join">Contact</a>
+        </div>
+    </nav>
+
+    <main id="home">
+        <div class="hero">
+            <div class="plate" aria-hidden="true"></div>
+            <div class="wrap">
+                <h1>Build a stronger body and mind</h1>
+                <p>Personal training, group classes and nutrition coaching built around your goals.</p>
+                <div class="btns"><a class="btn" href="#packages">View packages</a><a class="btn ghost"
+                        href="#join">Book a free tour</a></div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="wrap">
+                <div><b>12,000 sq ft</b><span>Training floor</span></div>
+                <div><b data-count="18">18</b><span>Certified coaches</span></div>
+                <div><b data-count="40" data-suf="+">40+</b><span>Weekly classes</span></div>
+                <div><b>5am–11pm</b><span>Open every day</span></div>
+            </div>
+        </div>
+
+        <section id="services">
+            <div class="wrap">
+                <h2>What we offer</h2>
+                <p class="lead">Pick one service or combine them. Every plan starts with a free assessment.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Personal training</h3>
+                        <p>One-on-one sessions with a coach who writes your program and tracks your progress.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Group classes</h3>
+                        <p>HIIT, spin, yoga, boxing and mobility classes for every level.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Strength and conditioning</h3>
+                        <p>Free weights, racks, platforms and sleds for lifters and athletes.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Nutrition coaching</h3>
+                        <p>Simple meal plans and weekly check-ins that fit your schedule.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Weight loss programs</h3>
+                        <p>12-week plans combining training, nutrition and accountability.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Recovery</h3>
+                        <p>Stretch zone, foam rolling and sauna access after your session.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="packages" style="background:var(--panel)">
+            <div class="wrap">
+                <h2>Packages</h2>
+                <p class="lead">No joining fee this month. Cancel with 30 days' notice.</p>
+                <div class="tgl" role="group" aria-label="Billing"><button class="on" data-p="m">Monthly</button><button
+                        data-p="y">Yearly (save 2 months)</button></div>
+                <div class="grid plans">
+                    <div class="card">
+                        <h3>Basic</h3>
+                        <div class="price" data-m="29">$29<small> /month</small></div>
+                        <ul>
+                            <li>Full gym access</li>
+                            <li>Locker rooms</li>
+                            <li>Free fitness assessment</li>
+                        </ul><a class="btn" href="#join">Choose Basic</a>
+                    </div>
+                    <div class="card feat">
+                        <h3>Pro</h3>
+                        <div class="price" data-m="69">$69<small> /month</small></div>
+                        <ul>
+                            <li>Everything in Basic</li>
+                            <li>Unlimited group classes</li>
+                            <li>Monthly body scan</li>
+                            <li>Recovery zone</li>
+                        </ul><a class="btn" href="#join">Choose Pro</a>
+                    </div>
+                    <div class="card">
+                        <h3>Elite</h3>
+                        <div class="price" data-m="199">$199<small> /month</small></div>
+                        <ul>
+                            <li>Everything in Pro</li>
+                            <li>4 personal training sessions</li>
+                            <li>Nutrition coaching</li>
+                        </ul><a class="btn" href="#join">Choose Elite</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="schedule">
+            <div class="wrap">
+                <h2>Class schedule</h2>
+                <p class="lead">Reserve a spot from the member app or at the front desk.</p>
+                <div class="tw">
+                    <table>
+                        <tr>
+                            <th>Time</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                        </tr>
+                        <tr>
+                            <td>6:00 am</td>
+                            <td>HIIT</td>
+                            <td>Spin</td>
+                            <td>Strength</td>
+                            <td>Spin</td>
+                            <td>HIIT</td>
+                        </tr>
+                        <tr>
+                            <td>12:00 pm</td>
+                            <td>Yoga</td>
+                            <td>Boxing</td>
+                            <td>Mobility</td>
+                            <td>Boxing</td>
+                            <td>Yoga</td>
+                        </tr>
+                        <tr>
+                            <td>6:00 pm</td>
+                            <td>Strength</td>
+                            <td>HIIT</td>
+                            <td>Spin</td>
+                            <td>Strength</td>
+                            <td>Bootcamp</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" style="background:var(--panel)">
+            <div class="wrap">
+                <h2>Member results</h2>
+                <p class="lead">Sample reviews. Replace with your own members' words.</p>
+                <div class="grid">
+                    <div class="card quote">I lost 14 kg in five months. My coach kept every session simple and
+                        challenging.<cite>Ananya, Pro member</cite></div>
+                    <div class="card quote">The strength area is clean and never overcrowded, even at 6 pm.<cite>Marcus,
+                            Basic member</cite></div>
+                    <div class="card quote">Nutrition coaching fixed the part I always skipped. Worth every
+                        dollar.<cite>Priya, Elite member</cite></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <div class="wrap">
+                <h2>Questions</h2>
+                <div style="max-width:760px">
+                    <details>
+                        <summary>Do I need experience?</summary>
+                        <p>No. Coaches adjust every workout to your level.</p>
+                    </details>
+                    <details>
+                        <summary>Can I try before joining?</summary>
+                        <p>Yes. Book a free tour and one-day pass below.</p>
+                    </details>
+                    <details>
+                        <summary>Is parking free?</summary>
+                        <p>Yes, for all members.</p>
+                    </details>
+                    <details>
+                        <summary>Can I freeze my membership?</summary>
+                        <p>Yes. Freeze for up to 3 months with 7 days' notice.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="cta" id="join">
+        <div class="wrap" style="padding-top:64px;padding-bottom:64px">
+            <div>
+                <h2>Ready to start? Book a free tour</h2>
+                <p class="lead" style="margin:10px 0 0">Tell us your goal and we'll set up a free assessment and day
+                    pass.</p>
+            </div>
+            <form id="f">
+                <input name="name" placeholder="Name" aria-label="Name" required>
+                <input name="email" type="email" placeholder="Email" aria-label="Email" required>
+                <select name="goal" aria-label="Goal">
+                    <option>Lose weight</option>
+                    <option>Build muscle</option>
+                    <option>Improve fitness</option>
+                    <option>Train for sport</option>
+                </select>
+                <input name="phone" type="tel" placeholder="Phone" aria-label="Phone">
+                <button class="btn" type="submit">Book my free tour</button>
+                <p id="msg" role="status"></p>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="wrap"><span>Forge Fitness Training · 123 Main Street</span><span>(555) 014-2020 ·
+                hello@forgefitness.example</span></div>
+    </footer>
+    <button class="top-btn" id="top" aria-label="Back to top">↑</button>
+    <script>
+        var d = document, $ = function (s) { return d.querySelector(s) }, $$ = function (s) { return [].slice.call(d.querySelectorAll(s)) };
+        d.documentElement.classList.add('js');
+        /* scroll reveal */
+        var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }) }, { threshold: .15 });
+        $$('.card,section h2,.lead,details,.tw').forEach(function (el, i) { el.classList.add('rv'); el.style.transitionDelay = (i % 3) * 80 + 'ms'; io.observe(el) });
+        /* count-up stats */
+        var co = new IntersectionObserver(function (es) { es.forEach(function (e) { if (!e.isIntersecting) return; co.unobserve(e.target); var el = e.target, t = +el.dataset.count, s = el.dataset.suf || '', t0 = performance.now(); (function f(n) { var p = Math.min((n - t0) / 1200, 1); el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3))) + s; if (p < 1) requestAnimationFrame(f) })(t0) }) });
+        $$('[data-count]').forEach(function (el) { co.observe(el) });
+        /* scroll progress, back to top, nav spy */
+        var links = $$('nav a'), secs = links.map(function (a) { return $(a.getAttribute('href')) });
+        function onScroll() { var h = d.documentElement, y = h.scrollTop, m = h.scrollHeight - h.clientHeight; $('#prog').style.width = (m ? y / m * 100 : 0) + '%'; $('#top').classList.toggle('show', y > 600); var cur = 0; secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top < 140) cur = i }); links.forEach(function (a, i) { a.classList.toggle('on', i === cur) }) }
+        addEventListener('scroll', onScroll, { passive: true }); onScroll();
+        $('#top').onclick = function () { scrollTo({ top: 0, behavior: 'smooth' }) };
+        /* pricing toggle */
+        $$('.tgl button').forEach(function (b) { b.onclick = function () { $$('.tgl button').forEach(function (x) { x.classList.toggle('on', x === b) }); var y = b.dataset.p === 'y'; $$('.price').forEach(function (p) { var m = +p.dataset.m; p.innerHTML = '$' + (y ? m * 10 : m) + '<small> /' + (y ? 'year' : 'month') + '</small>' }) } });
+        /* form validation */
+        $('#f').addEventListener('submit', function (e) { e.preventDefault(); var f = this, msg = $('#msg'), ok = true;[f.name, f.email].forEach(function (i) { var bad = !i.value.trim() || !i.checkValidity(); i.classList.toggle('bad', bad); if (bad) ok = false }); if (!ok) { msg.textContent = 'Please enter your name and a valid email.'; return } var b = f.querySelector('button'); b.disabled = true; fetch('/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: f.name.value, email: f.email.value, phone: f.phone.value, goal: f.goal.value }) }).then(function (r) { return r.json().then(function (j) { msg.textContent = j.message || j.error; if (r.ok) f.reset() }) }).catch(function () { msg.textContent = 'Server unreachable. Please call us instead.' }).finally(function () { b.disabled = false }) });
+    </script>
+</body>
+
+</html>
